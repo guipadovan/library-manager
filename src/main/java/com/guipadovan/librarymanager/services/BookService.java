@@ -4,6 +4,7 @@ import com.guipadovan.librarymanager.dtos.BookDto;
 import com.guipadovan.librarymanager.entities.Book;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -48,6 +49,17 @@ public interface BookService {
      * @return a page of Book objects
      */
     Page<Book> getAllBooks(int page, int size);
+
+    /**
+     * Retrieves a limited list of recommended books for a user.
+     * The recommendations are based on the user's reading history and the categories of the books.
+     *
+     * @param userId the ID of the user to get recommendations for
+     * @param limit  the maximum number of recommendations to return
+     *
+     * @return a list of Book objects
+     */
+    List<Book> getBookRecommendations(Long userId, int limit);
 
     /**
      * Deletes a book by its ID.

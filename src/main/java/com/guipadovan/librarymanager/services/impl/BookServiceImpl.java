@@ -2,15 +2,19 @@ package com.guipadovan.librarymanager.services.impl;
 
 import com.guipadovan.librarymanager.dtos.BookDto;
 import com.guipadovan.librarymanager.entities.Book;
+import com.guipadovan.librarymanager.entities.User;
 import com.guipadovan.librarymanager.exceptions.EntityNotFoundException;
 import com.guipadovan.librarymanager.repositories.BookRepository;
 import com.guipadovan.librarymanager.services.BookService;
+import com.guipadovan.librarymanager.services.LeaseService;
+import com.guipadovan.librarymanager.services.UserService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -21,9 +25,13 @@ import java.util.Optional;
 public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
+    private final UserService userService;
+    private final LeaseService leaseService;
 
-    public BookServiceImpl(BookRepository bookRepository) {
+    public BookServiceImpl(BookRepository bookRepository, UserService userService, LeaseService leaseService) {
         this.bookRepository = bookRepository;
+        this.userService = userService;
+        this.leaseService = leaseService;
     }
 
     @Override
@@ -66,6 +74,27 @@ public class BookServiceImpl implements BookService {
     public Page<Book> getAllBooks(int page, int size) {
         log.info("Getting all books");
         return bookRepository.findAll(PageRequest.of(page, size));
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @throws EntityNotFoundException if the user is not found
+     */
+    @Override
+    public List<Book> getBookRecommendations(Long userId, int limit) throws EntityNotFoundException {
+        // Busca o usuário pelo ID, lança exceção se não encontrado
+        userService.getUser(userId).orElseThrow(() -> new EntityNotFoundException(User.class, userId.toString()));
+
+        // Busca todos os livros emprestados pelo usuário e cria os filtros para buscar livros recomendados
+        List<Book> usersLeasedBooks = leaseService.getLeasedBooksByUser(userId);
+        List<String> categories = usersLeasedBooks.stream().map(Book::getCategory).distinct().toList();
+        List<Long> excludedBookIds = usersLeasedBooks.stream().map(Book::getId).toList();
+
+        List<Book> books = bookRepository.findBooksByCategoriesRandomizedAndOrdered(categories, excludedBookIds, PageRequest.of(0, limit));
+
+        log.info("Getting book recommendations for user with id {}", userId);
+        return books;
     }
 
     @Override

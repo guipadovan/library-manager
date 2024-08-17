@@ -16,6 +16,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -115,6 +116,12 @@ public class LeaseServiceImpl implements LeaseService {
     public Page<Lease> getAllLeases(int page, int size) {
         log.info("Getting all leases");
         return leaseRepository.findAll(PageRequest.of(page, size));
+    }
+
+    @Override
+    public List<Book> getLeasedBooksByUser(Long userId) {
+        log.info("Getting leased book IDs for user with id {}", userId);
+        return leaseRepository.findAllBooksLeasedByUserOrderByLeaseDateDesc(userId);
     }
 
     @Override

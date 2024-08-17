@@ -1,9 +1,11 @@
 package com.guipadovan.librarymanager.services;
 
 import com.guipadovan.librarymanager.dtos.LeaseDto;
+import com.guipadovan.librarymanager.entities.Book;
 import com.guipadovan.librarymanager.entities.Lease;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -23,7 +25,7 @@ public interface LeaseService {
     /**
      * Updates an existing book lease.
      *
-     * @param id          the ID of the lease to update
+     * @param id           the ID of the lease to update
      * @param leaseDetails the lease DTO containing the updated lease details
      *
      * @return the updated Lease entity
@@ -48,6 +50,15 @@ public interface LeaseService {
      * @return a page of Lease objects
      */
     Page<Lease> getAllLeases(int page, int size);
+
+    /**
+     * Retrieves a list of books that a user has leased.
+     *
+     * @param userId the ID of the user to get leased book IDs for
+     *
+     * @return a list of Book objects containing the leased books
+     */
+    List<Book> getLeasedBooksByUser(Long userId);
 
     /**
      * Deletes a book lease by its ID.
