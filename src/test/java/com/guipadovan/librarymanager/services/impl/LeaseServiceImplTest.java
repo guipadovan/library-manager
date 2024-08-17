@@ -65,9 +65,7 @@ public class LeaseServiceImplTest {
 
         when(userService.getUser(any(Long.class))).thenReturn(Optional.empty());
 
-        InputValidationException exception = assertThrows(InputValidationException.class, () -> {
-            leaseService.createLease(leaseDto);
-        });
+        InputValidationException exception = assertThrows(InputValidationException.class, () -> leaseService.createLease(leaseDto));
 
         assertTrue(exception.getFieldErrors().containsKey("userId"));
         verify(userService, times(1)).getUser(any(Long.class));
@@ -80,9 +78,7 @@ public class LeaseServiceImplTest {
 
         when(bookService.getBook(any(Long.class))).thenReturn(Optional.empty());
 
-        InputValidationException exception = assertThrows(InputValidationException.class, () -> {
-            leaseService.createLease(leaseDto);
-        });
+        InputValidationException exception = assertThrows(InputValidationException.class, () -> leaseService.createLease(leaseDto));
 
         assertTrue(exception.getFieldErrors().containsKey("bookId"));
         verify(bookService, times(1)).getBook(any(Long.class));
@@ -92,9 +88,7 @@ public class LeaseServiceImplTest {
     void createLease_ShouldThrowException_WhenLeaseDetailsAreIncomplete() {
         LeaseDto leaseDto = new LeaseDto();
 
-        InputValidationException exception = assertThrows(InputValidationException.class, () -> {
-            leaseService.createLease(leaseDto);
-        });
+        InputValidationException exception = assertThrows(InputValidationException.class, () -> leaseService.createLease(leaseDto));
 
         assertFalse(exception.getFieldErrors().isEmpty());
     }
@@ -120,9 +114,7 @@ public class LeaseServiceImplTest {
     void returnBook_ShouldThrowException_WhenBookNotFound() {
         when(bookService.getBook(any(Long.class))).thenReturn(Optional.empty());
 
-        InputValidationException exception = assertThrows(InputValidationException.class, () -> {
-            leaseService.returnBook(1L);
-        });
+        InputValidationException exception = assertThrows(InputValidationException.class, () -> leaseService.returnBook(1L));
 
         assertTrue(exception.getFieldErrors().containsKey("bookId"));
         verify(bookService, times(1)).getBook(any(Long.class));
@@ -133,9 +125,7 @@ public class LeaseServiceImplTest {
         when(bookService.getBook(any(Long.class))).thenReturn(Optional.of(new Book()));
         when(leaseRepository.existsByBook_IdAndStatusActive(any(Long.class))).thenReturn(false);
 
-        InputValidationException exception = assertThrows(InputValidationException.class, () -> {
-            leaseService.returnBook(1L);
-        });
+        InputValidationException exception = assertThrows(InputValidationException.class, () -> leaseService.returnBook(1L));
 
         assertTrue(exception.getFieldErrors().containsKey("bookId"));
     }

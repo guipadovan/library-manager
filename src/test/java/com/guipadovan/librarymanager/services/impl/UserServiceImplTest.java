@@ -4,7 +4,6 @@ import com.guipadovan.librarymanager.dtos.UserDto;
 import com.guipadovan.librarymanager.entities.User;
 import com.guipadovan.librarymanager.exceptions.EntityNotFoundException;
 import com.guipadovan.librarymanager.repositories.UserRepository;
-import jakarta.validation.ValidationException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

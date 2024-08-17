@@ -100,9 +100,7 @@ public class RecommendationServiceImplTest {
 
         when(userService.getUser(userId)).thenReturn(Optional.empty());
 
-        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () -> {
-            recommendationService.getBookRecommendationsByUser(userId, limit);
-        });
+        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () -> recommendationService.getBookRecommendationsByUser(userId, limit));
 
         assertEquals("User with id 1 not found.", exception.getMessage());
         verify(userService, times(1)).getUser(userId);
