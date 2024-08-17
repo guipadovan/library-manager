@@ -16,16 +16,20 @@ public interface LoanService {
      * Creates a new loan.
      *
      * @param loanDetails the loan DTO containing the loan details
+     *
+     * @return the created Loan entity
      */
-    void createLoan(LoanDto loanDetails);
+    Loan createLoan(LoanDto loanDetails);
 
     /**
      * Updates an existing loan.
      *
      * @param id   the ID of the loan to update
      * @param loanDetails the loan DTO containing the updated loan details
+     *
+     * @return the updated Loan entity
      */
-    void updateLoan(Long id, LoanDto loanDetails);
+    Loan updateLoan(Long id, LoanDto loanDetails);
 
     /**
      * Retrieves a loan by its ID.
@@ -50,6 +54,8 @@ public interface LoanService {
      * Deletes a loan by its ID.
      *
      * @param id the ID of the loan to delete
+     *
+     * @return true if the loan was successfully deleted, false otherwise
      */
-    void deleteLoan(Long id);
+    boolean deleteLoan(Long id);
 }

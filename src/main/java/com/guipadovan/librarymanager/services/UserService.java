@@ -15,15 +15,19 @@ public interface UserService {
      * Creates a new user.
      *
      * @param userDetails the user DTO containing the user details
+     *
+     * @return the created User entity
      */
-    void createUser(UserDto userDetails);
+    User createUser(UserDto userDetails);
 
     /**
      * Updates an existing user.
      *
      * @param userDetails the user DTO containing the updated user details
+     *
+     * @return the updated User entity
      */
-    void updateUser(UserDto userDetails);
+    User updateUser(UserDto userDetails);
 
     /**
      * Retrieves a user by its ID.
@@ -48,6 +52,8 @@ public interface UserService {
      * Deletes a user.
      *
      * @param user the user entity to delete
+     *
+     * @return true if the user was successfully deleted, false otherwise
      */
-    void deleteUser(User user);
+    boolean deleteUser(User user);
 }
