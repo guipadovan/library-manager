@@ -58,6 +58,42 @@ public class RecommendationServiceImplTest {
     }
 
     @Test
+    void getBookRecommendationsByUser_ShouldReturnEmptyList_WhenUserHasLeasedNoBooks() throws EntityNotFoundException {
+        Long userId = 2L;
+        int limit = 5;
+        User user = new User();
+
+        when(userService.getUser(userId)).thenReturn(Optional.of(user));
+        when(leaseService.getLeasedBooksByUser(userId)).thenReturn(List.of());
+        when(bookService.getBookRecommendations(any(), any(), eq(limit))).thenReturn(List.of());
+
+        List<Book> recommendations = recommendationService.getBookRecommendationsByUser(userId, limit);
+
+        assertEquals(0, recommendations.size());
+        verify(leaseService, times(1)).getLeasedBooksByUser(userId);
+        verify(bookService, times(1)).getBookRecommendations(any(), any(), eq(limit));
+    }
+
+    @Test
+    void getBookRecommendationsByUser_ShouldReturnEmptyList_WhenNoBooksMatchTheCategories() throws EntityNotFoundException {
+        Long userId = 3L;
+        int limit = 5;
+        User user = new User();
+        Book leasedBook = new Book();
+        leasedBook.setCategory("Ficção");
+
+        when(userService.getUser(userId)).thenReturn(Optional.of(user));
+        when(leaseService.getLeasedBooksByUser(userId)).thenReturn(List.of(leasedBook));
+        when(bookService.getBookRecommendations(any(), any(), eq(limit))).thenReturn(List.of());
+
+        List<Book> recommendations = recommendationService.getBookRecommendationsByUser(userId, limit);
+
+        assertEquals(0, recommendations.size());
+        verify(leaseService, times(1)).getLeasedBooksByUser(userId);
+        verify(bookService, times(1)).getBookRecommendations(any(), any(), eq(limit));
+    }
+
+    @Test
     void getBookRecommendationsByUser_ShouldThrowException_WhenUserNotFound() {
         Long userId = 1L;
         int limit = 5;

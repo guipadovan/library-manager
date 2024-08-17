@@ -74,6 +74,32 @@ public class LeaseServiceImplTest {
     }
 
     @Test
+    void createLease_ShouldThrowException_WhenBookNotFound() {
+        LeaseDto leaseDto = new LeaseDto();
+        leaseDto.setBookId(1L);
+
+        when(bookService.getBook(any(Long.class))).thenReturn(Optional.empty());
+
+        InputValidationException exception = assertThrows(InputValidationException.class, () -> {
+            leaseService.createLease(leaseDto);
+        });
+
+        assertTrue(exception.getFieldErrors().containsKey("bookId"));
+        verify(bookService, times(1)).getBook(any(Long.class));
+    }
+
+    @Test
+    void createLease_ShouldThrowException_WhenLeaseDetailsAreIncomplete() {
+        LeaseDto leaseDto = new LeaseDto();
+
+        InputValidationException exception = assertThrows(InputValidationException.class, () -> {
+            leaseService.createLease(leaseDto);
+        });
+
+        assertFalse(exception.getFieldErrors().isEmpty());
+    }
+
+    @Test
     void returnBook_ShouldUpdateLeaseStatus_WhenInputIsValid() throws InputValidationException {
         Book book = new Book();
         Lease lease = new Lease();
@@ -100,5 +126,17 @@ public class LeaseServiceImplTest {
 
         assertTrue(exception.getFieldErrors().containsKey("bookId"));
         verify(bookService, times(1)).getBook(any(Long.class));
+    }
+
+    @Test
+    void returnBook_ShouldThrowException_WhenBookNotLeased() {
+        when(bookService.getBook(any(Long.class))).thenReturn(Optional.of(new Book()));
+        when(leaseRepository.existsByBook_IdAndStatusActive(any(Long.class))).thenReturn(false);
+
+        InputValidationException exception = assertThrows(InputValidationException.class, () -> {
+            leaseService.returnBook(1L);
+        });
+
+        assertTrue(exception.getFieldErrors().containsKey("bookId"));
     }
 }

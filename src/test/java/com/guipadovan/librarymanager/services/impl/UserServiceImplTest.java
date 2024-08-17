@@ -2,7 +2,9 @@ package com.guipadovan.librarymanager.services.impl;
 
 import com.guipadovan.librarymanager.dtos.UserDto;
 import com.guipadovan.librarymanager.entities.User;
+import com.guipadovan.librarymanager.exceptions.EntityNotFoundException;
 import com.guipadovan.librarymanager.repositories.UserRepository;
+import jakarta.validation.ValidationException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -61,6 +63,16 @@ public class UserServiceImplTest {
     }
 
     @Test
+    void updateUser_ShouldThrowEntityNotFoundException_WhenIdDoesNotExist() {
+        Long nonExistentId = 1L;
+        UserDto userDto = new UserDto("Test User", "test@example.com", LocalDate.now(), "123-4567");
+
+        when(userRepository.findById(nonExistentId)).thenReturn(Optional.empty());
+
+        assertThrows(EntityNotFoundException.class, () -> userService.updateUser(nonExistentId, userDto));
+    }
+
+    @Test
     void getUser_ShouldReturnUser_WhenIdExists() {
         Long userId = 1L;
         User userEntity = new User("Usuário Teste", "usuario@teste.com", LocalDate.now(), "(44) 91234-5678");
@@ -90,6 +102,15 @@ public class UserServiceImplTest {
         assertNotNull(users);
         assertEquals(2, users.getNumberOfElements());
         verify(userRepository, times(1)).findAll(PageRequest.of(page, size));
+    }
+
+    @Test
+    void getAllUsers_ShouldReturnEmptyPage_WhenNoUsersExist() {
+        when(userRepository.findAll(PageRequest.of(0, 10))).thenReturn(Page.empty());
+
+        Page<User> result = userService.getAllUsers(0, 10);
+
+        assertTrue(result.isEmpty());
     }
 
     @Test

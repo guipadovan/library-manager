@@ -2,6 +2,7 @@ package com.guipadovan.librarymanager.services.impl;
 
 import com.guipadovan.librarymanager.dtos.BookDto;
 import com.guipadovan.librarymanager.entities.Book;
+import com.guipadovan.librarymanager.exceptions.EntityNotFoundException;
 import com.guipadovan.librarymanager.repositories.BookRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -62,6 +63,16 @@ public class BookServiceImplTest {
     }
 
     @Test
+    void updateBook_ShouldThrowEntityNotFoundException_WhenIdDoesNotExist() {
+        Long nonExistentId = 1L;
+        BookDto bookDto = new BookDto("Test Title", "Test Author", "123456789", LocalDate.now(), "Test Category");
+
+        when(bookRepository.findById(nonExistentId)).thenReturn(Optional.empty());
+
+        assertThrows(EntityNotFoundException.class, () -> bookService.updateBook(nonExistentId, bookDto));
+    }
+
+    @Test
     void getBook_ShouldReturnBook_WhenIdExists() {
         Long bookId = 1L;
         Book book = new Book("Título de Teste", "Autor de Teste", "1234567890123", LocalDate.now(), "Ficção");
@@ -93,6 +104,15 @@ public class BookServiceImplTest {
     }
 
     @Test
+    void getAllBooks_ShouldReturnEmptyPage_WhenNoBooksExist() {
+        when(bookRepository.findAll(PageRequest.of(0, 10))).thenReturn(Page.empty());
+
+        Page<Book> result = bookService.getAllBooks(0, 10);
+
+        assertTrue(result.isEmpty());
+    }
+
+    @Test
     void getBookRecommendations_ShouldReturnRecommendations() {
         List<String> categories = Arrays.asList("Ficção", "Ciência");
         List<Long> excludedIds = Arrays.asList(1L, 2L);
@@ -108,6 +128,18 @@ public class BookServiceImplTest {
         assertNotNull(result);
         assertEquals(2, result.size());
         verify(bookRepository, times(1)).findBooksByCategoriesRandomizedAndOrdered(categories, excludedIds, PageRequest.of(0, limit));
+    }
+
+    @Test
+    void getBookRecommendations_ShouldHandleEmptyCategories() {
+        List<Long> excludedBookIds = Arrays.asList(1L, 2L);
+
+        when(bookRepository.findBooksByCategoriesRandomizedAndOrdered(any(List.class), eq(excludedBookIds), any(PageRequest.class)))
+                .thenReturn(List.of());
+
+        List<Book> result = bookService.getBookRecommendations(List.of(), excludedBookIds, 5);
+
+        assertTrue(result.isEmpty());
     }
 
     @Test
