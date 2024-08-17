@@ -23,11 +23,12 @@ public interface BookService {
     /**
      * Updates an existing book.
      *
+     * @param id          the ID of the book to update
      * @param bookDetails the book DTO containing the updated book details
      *
      * @return the updated Book entity
      */
-    Book updateBook(BookDto bookDetails);
+    Book updateBook(Long id, BookDto bookDetails);
 
     /**
      * Retrieves a book by its ID.

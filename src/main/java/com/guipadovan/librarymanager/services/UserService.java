@@ -23,11 +23,12 @@ public interface UserService {
     /**
      * Updates an existing user.
      *
+     * @param id          the ID of the user to update
      * @param userDetails the user DTO containing the updated user details
      *
      * @return the updated User entity
      */
-    User updateUser(UserDto userDetails);
+    User updateUser(Long id, UserDto userDetails);
 
     /**
      * Retrieves a user by its ID.
