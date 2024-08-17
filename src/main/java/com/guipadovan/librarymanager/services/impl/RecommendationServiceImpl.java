@@ -9,10 +9,11 @@ import com.guipadovan.librarymanager.services.RecommendationService;
 import com.guipadovan.librarymanager.services.UserService;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Setter
+@Service
 @Slf4j
 public class RecommendationServiceImpl implements RecommendationService {
 
