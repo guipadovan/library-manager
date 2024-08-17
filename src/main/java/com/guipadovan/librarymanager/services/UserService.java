@@ -49,11 +49,11 @@ public interface UserService {
     Page<User> getAllUsers(int page, int size);
 
     /**
-     * Deletes a user.
+     * Deletes a user by his ID.
      *
-     * @param user the user entity to delete
+     * @param id the ID of the user to delete
      *
      * @return true if the user was successfully deleted, false otherwise
      */
-    boolean deleteUser(User user);
+    boolean deleteUser(Long id);
 }
