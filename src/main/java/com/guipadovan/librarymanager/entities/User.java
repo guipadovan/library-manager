@@ -1,6 +1,9 @@
 package com.guipadovan.librarymanager.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,18 +20,25 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
+    @NotNull(message = "O ID não deve ser nulo")
     private Long id;
 
     @Column(name = "nome", nullable = false)
+    @NotNull(message = "O nome não deve ser nulo")
     private String name;
 
     @Column(name = "email", nullable = false)
+    @Email(message = "O e-mail deve ser válido")
+    @NotNull(message = "O e-mail não deve ser nulo")
     private String email;
 
     @Column(name = "data_cadastro", nullable = false)
+    @PastOrPresent(message = "A data de cadastro deve estar no passado ou no presente")
+    @NotNull(message = "A data de cadastro não deve ser nula")
     private LocalDate registrationDate;
 
     @Column(name = "telefone", nullable = false)
+    @NotNull(message = "O telefone não deve ser nulo")
     private String phone;
 
     public User(String name, String email, LocalDate registrationDate, String phone) {
