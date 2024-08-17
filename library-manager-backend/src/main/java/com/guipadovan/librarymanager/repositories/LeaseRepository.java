@@ -8,7 +8,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.lang.NonNull;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface LeaseRepository extends JpaRepository<Lease, Long> {
     @Query("select l from Lease l where l.book.id = :id")
