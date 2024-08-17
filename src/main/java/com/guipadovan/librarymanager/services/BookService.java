@@ -51,15 +51,15 @@ public interface BookService {
     Page<Book> getAllBooks(int page, int size);
 
     /**
-     * Retrieves a limited list of recommended books for a user.
-     * The recommendations are based on the user's reading history and the categories of the books.
+     * Retrieves a limited list of recommended books based on the provided categories and excluded book IDs.
      *
-     * @param userId the ID of the user to get recommendations for
-     * @param limit  the maximum number of recommendations to return
+     * @param categories      the list of categories to filter the books by
+     * @param excludedBookIds the list of book IDs to exclude from the recommendations
+     * @param limit           the maximum number of recommendations to return
      *
      * @return a list of Book objects
      */
-    List<Book> getBookRecommendations(Long userId, int limit);
+    List<Book> getBookRecommendations(List<String> categories, List<Long> excludedBookIds, int limit);
 
     /**
      * Deletes a book by its ID.

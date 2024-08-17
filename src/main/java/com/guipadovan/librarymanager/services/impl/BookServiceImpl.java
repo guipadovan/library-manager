@@ -25,13 +25,9 @@ import java.util.Optional;
 public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
-    private final UserService userService;
-    private final LeaseService leaseService;
 
-    public BookServiceImpl(BookRepository bookRepository, UserService userService, LeaseService leaseService) {
+    public BookServiceImpl(BookRepository bookRepository) {
         this.bookRepository = bookRepository;
-        this.userService = userService;
-        this.leaseService = leaseService;
     }
 
     @Override
@@ -76,25 +72,9 @@ public class BookServiceImpl implements BookService {
         return bookRepository.findAll(PageRequest.of(page, size));
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @throws EntityNotFoundException if the user is not found
-     */
     @Override
-    public List<Book> getBookRecommendations(Long userId, int limit) throws EntityNotFoundException {
-        // Busca o usuário pelo ID, lança exceção se não encontrado
-        userService.getUser(userId).orElseThrow(() -> new EntityNotFoundException(User.class, userId.toString()));
-
-        // Busca todos os livros emprestados pelo usuário e cria os filtros para buscar livros recomendados
-        List<Book> usersLeasedBooks = leaseService.getLeasedBooksByUser(userId);
-        List<String> categories = usersLeasedBooks.stream().map(Book::getCategory).distinct().toList();
-        List<Long> excludedBookIds = usersLeasedBooks.stream().map(Book::getId).toList();
-
-        List<Book> books = bookRepository.findBooksByCategoriesRandomizedAndOrdered(categories, excludedBookIds, PageRequest.of(0, limit));
-
-        log.info("Getting book recommendations for user with id {}", userId);
-        return books;
+    public List<Book> getBookRecommendations(List<String> categories, List<Long> excludedBookIds, int limit) {
+        return bookRepository.findBooksByCategoriesRandomizedAndOrdered(categories, excludedBookIds, PageRequest.of(0, limit));
     }
 
     @Override
