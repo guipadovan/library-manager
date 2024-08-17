@@ -4,12 +4,15 @@ import com.guipadovan.librarymanager.dtos.BookDto;
 import com.guipadovan.librarymanager.entities.Book;
 import com.guipadovan.librarymanager.exceptions.EntityNotFoundException;
 import com.guipadovan.librarymanager.services.BookService;
+import com.guipadovan.librarymanager.services.GoogleBooksService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -21,9 +24,11 @@ import java.util.Optional;
 public class BookController {
 
     private final BookService bookService;
+    private final GoogleBooksService googleBooksService;
 
-    public BookController(BookService bookService) {
+    public BookController(BookService bookService, GoogleBooksService googleBooksService) {
         this.bookService = bookService;
+        this.googleBooksService = googleBooksService;
     }
 
     /**
@@ -101,6 +106,23 @@ public class BookController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
             throw new EntityNotFoundException(Book.class, id.toString());
+        }
+    }
+
+    /**
+     * Searches for books by title using the Google Books API.
+     *
+     * @param title the title of the book to search for
+     *
+     * @return a list of books that match the title
+     */
+    @GetMapping("/search")
+    public ResponseEntity<List<Book>> searchBooks(@RequestParam("title") String title) {
+        try {
+            List<Book> books = googleBooksService.searchBooksByTitle(title);
+            return ResponseEntity.ok(books);
+        } catch (IOException e) {
+            return ResponseEntity.status(500).body(null);
         }
     }
 }
