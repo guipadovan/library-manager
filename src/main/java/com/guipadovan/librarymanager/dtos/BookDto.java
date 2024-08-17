@@ -21,7 +21,6 @@ public class BookDto {
     private String author;
 
     @NotNull(message = "O ISBN não deve ser nulo")
-    @Pattern(regexp = "\\d{13}", message = "O ISBN deve conter 13 dígitos")
     private String isbn;
 
     @NotNull(message = "A data de publicação não deve ser nula")

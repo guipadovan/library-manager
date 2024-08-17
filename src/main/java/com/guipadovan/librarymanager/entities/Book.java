@@ -29,7 +29,7 @@ public class Book {
     @NotNull(message = "O autor não deve ser nulo")
     private String author;
 
-    @Column(name = "isbn", nullable = false, length = 13)
+    @Column(name = "isbn", nullable = false)
     @NotNull(message = "O ISBN não deve ser nulo")
     private String isbn;
 
