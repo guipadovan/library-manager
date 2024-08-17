@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 @Getter
 @Setter
@@ -26,7 +25,7 @@ public class Book {
     @Column(name = "autor", nullable = false)
     private String author;
 
-    @Column(name = "isbn", nullable = false)
+    @Column(name = "isbn", nullable = false, length = 13)
     private String isbn;
 
     @Column(name = "data_publicacao", nullable = false)

@@ -2,13 +2,9 @@ package com.guipadovan.librarymanager.services.impl;
 
 import com.guipadovan.librarymanager.dtos.BookDto;
 import com.guipadovan.librarymanager.entities.Book;
-import com.guipadovan.librarymanager.entities.User;
 import com.guipadovan.librarymanager.exceptions.EntityNotFoundException;
 import com.guipadovan.librarymanager.repositories.BookRepository;
 import com.guipadovan.librarymanager.services.BookService;
-import com.guipadovan.librarymanager.services.LeaseService;
-import com.guipadovan.librarymanager.services.UserService;
-import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -45,7 +41,7 @@ public class BookServiceImpl implements BookService {
      * @throws EntityNotFoundException if the book is not found
      */
     @Override
-    public Book updateBook(Long id, @Valid BookDto bookDetails) {
+    public Book updateBook(Long id, BookDto bookDetails) {
         // Busca o livro pelo ID, lança exceção se não encontrado
         Book bookEntity = bookRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(Book.class, id.toString()));
 
