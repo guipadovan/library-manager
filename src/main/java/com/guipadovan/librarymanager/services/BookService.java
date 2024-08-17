@@ -14,20 +14,20 @@ public interface BookService {
     /**
      * Creates a new book.
      *
-     * @param book the book DTO containing the book details
+     * @param bookDetails the book DTO containing the book details
      *
      * @return the created Book entity
      */
-    Book createBook(BookDto book);
+    Book createBook(BookDto bookDetails);
 
     /**
      * Updates an existing book.
      *
-     * @param book the book DTO containing the updated book details
+     * @param bookDetails the book DTO containing the updated book details
      *
      * @return the updated Book entity
      */
-    Book updateBook(BookDto book);
+    Book updateBook(BookDto bookDetails);
 
     /**
      * Retrieves a book by its ID.

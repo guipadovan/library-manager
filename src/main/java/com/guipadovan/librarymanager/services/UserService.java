@@ -14,16 +14,16 @@ public interface UserService {
     /**
      * Creates a new user.
      *
-     * @param user the user DTO containing the user details
+     * @param userDetails the user DTO containing the user details
      */
-    void createUser(UserDto user);
+    void createUser(UserDto userDetails);
 
     /**
      * Updates an existing user.
      *
-     * @param user the user DTO containing the updated user details
+     * @param userDetails the user DTO containing the updated user details
      */
-    void updateUser(UserDto user);
+    void updateUser(UserDto userDetails);
 
     /**
      * Retrieves a user by its ID.
