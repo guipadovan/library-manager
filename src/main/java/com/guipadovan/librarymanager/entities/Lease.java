@@ -11,8 +11,8 @@ import java.time.LocalDate;
 @Setter
 @Entity
 @NoArgsConstructor
-@Table(name = "loan")
-public class Loan {
+@Table(name = "lease")
+public class Lease {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -20,15 +20,15 @@ public class Loan {
     private Long id;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "usuario_id", nullable = false, foreignKey = @ForeignKey(name = "fk_loan_user"))
+    @JoinColumn(name = "usuario_id", nullable = false, foreignKey = @ForeignKey(name = "fk_lease_user"))
     private User user;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "livro_id", nullable = false, foreignKey = @ForeignKey(name = "fk_loan_book"))
+    @JoinColumn(name = "livro_id", nullable = false, foreignKey = @ForeignKey(name = "fk_lease_book"))
     private Book book;
 
     @Column(name = "data_emprestimo", nullable = false)
-    private LocalDate loanDate;
+    private LocalDate leaseDate;
 
     @Column(name = "data_devolucao", nullable = false)
     private LocalDate returnDate;
@@ -41,10 +41,10 @@ public class Loan {
         ACTIVE, RETURNED
     }
 
-    public Loan(User user, Book book, LocalDate loanDate, LocalDate returnDate, Status status) {
+    public Lease(User user, Book book, LocalDate leaseDate, LocalDate returnDate, Status status) {
         this.user = user;
         this.book = book;
-        this.loanDate = loanDate;
+        this.leaseDate = leaseDate;
         this.returnDate = returnDate;
         this.status = status;
     }

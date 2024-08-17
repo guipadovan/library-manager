@@ -15,7 +15,7 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class LoanDto {
+public class LeaseDto {
 
     @NotNull(message = "O usuário não deve ser nulo")
     private Long userId;
@@ -25,7 +25,7 @@ public class LoanDto {
 
     @NotNull(message = "A data de empréstimo não deve ser nula")
     @PastOrPresent(message = "A data de empréstimo deve estar no passado ou no presente")
-    private LocalDate loanDate;
+    private LocalDate leaseDate;
 
     @NotNull(message = "A data de devolução não deve ser nula")
     @Future(message = "A data de devolução deve estar no futuro")
