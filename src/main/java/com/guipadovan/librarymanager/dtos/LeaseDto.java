@@ -3,7 +3,6 @@ package com.guipadovan.librarymanager.dtos;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
-import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,9 +29,5 @@ public class LeaseDto {
     @NotNull(message = "A data de devolução não deve ser nula")
     @Future(message = "A data de devolução deve estar no futuro")
     private LocalDate returnDate;
-
-    @NotNull(message = "O status não deve ser nulo")
-    @Pattern(regexp = "ACTIVE|RETURNED", message = "O status deve ser ACTIVE ou RETURNED")
-    private String status;
 
 }
