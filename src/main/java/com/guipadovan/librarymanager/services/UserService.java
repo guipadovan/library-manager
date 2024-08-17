@@ -1,0 +1,53 @@
+package com.guipadovan.librarymanager.services;
+
+import com.guipadovan.librarymanager.dtos.UserDto;
+import com.guipadovan.librarymanager.entities.User;
+import org.springframework.data.domain.Page;
+
+import java.util.Optional;
+
+/**
+ * Service interface for managing users.
+ */
+public interface UserService {
+
+    /**
+     * Creates a new user.
+     *
+     * @param user the user DTO containing the user details
+     */
+    void createUser(UserDto user);
+
+    /**
+     * Updates an existing user.
+     *
+     * @param user the user DTO containing the updated user details
+     */
+    void updateUser(UserDto user);
+
+    /**
+     * Retrieves a user by its ID.
+     *
+     * @param id the ID of the user to retrieve
+     *
+     * @return an Optional containing the user if found, or an empty Optional if not found
+     */
+    Optional<User> getUser(Long id);
+
+    /**
+     * Retrieves a page of users.
+     *
+     * @param page the page number to retrieve (starting from 0)
+     * @param size the number of users per page
+     *
+     * @return a page of User objects
+     */
+    Page<User> getAllUsers(int page, int size);
+
+    /**
+     * Deletes a user.
+     *
+     * @param user the user entity to delete
+     */
+    void deleteUser(User user);
+}
