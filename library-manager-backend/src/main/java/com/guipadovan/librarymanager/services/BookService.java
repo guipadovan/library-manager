@@ -52,6 +52,7 @@ public interface BookService {
 
     /**
      * Retrieves a limited list of recommended books based on the provided categories and excluded book IDs.
+     * It only returns books that are available in the library.
      *
      * @param categories      the list of categories to filter the books by
      * @param excludedBookIds the list of book IDs to exclude from the recommendations
