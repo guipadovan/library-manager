@@ -92,7 +92,7 @@ public class LeaseServiceImpl implements LeaseService {
         if (!fieldErrors.isEmpty())
             throw new InputValidationException("Field validation errors", fieldErrors);
 
-        Lease lease = leaseRepository.findByBook_Id(id);
+        Lease lease = leaseRepository.findByBook_IdAndStatusActive(id);
 
         lease.setStatus(Lease.Status.RETURNED);
         lease.setReturnDate(LocalDate.now());

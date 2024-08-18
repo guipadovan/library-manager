@@ -10,8 +10,8 @@ import org.springframework.lang.NonNull;
 import java.util.List;
 
 public interface LeaseRepository extends JpaRepository<Lease, Long> {
-    @Query("select l from Lease l where l.book.id = :id")
-    Lease findByBook_Id(@Param("id") Long id);
+    @Query("select l from Lease l where l.book.id = :id and l.status = 'ACTIVE'")
+    Lease findByBook_IdAndStatusActive(@Param("id") Long id);
 
     @Query("select (count(l) > 0) from Lease l where l.book.id = :id and l.status = 'ACTIVE'")
     boolean existsByBook_IdAndStatusActive(@Param("id") @NonNull Long id);
