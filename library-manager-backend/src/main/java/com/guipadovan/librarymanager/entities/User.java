@@ -1,5 +1,6 @@
 package com.guipadovan.librarymanager.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -9,6 +10,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -40,6 +43,10 @@ public class User {
     @Column(name = "telefone", nullable = false)
     @NotNull(message = "O telefone não deve ser nulo")
     private String phone;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<Lease> leases = new ArrayList<>();
 
     public User(String name, String email, LocalDate registrationDate, String phone) {
         this.name = name;

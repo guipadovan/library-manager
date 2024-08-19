@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @Setter
 @Entity
 @NoArgsConstructor
-@Table(name = "lease")
+@Table(name = "leases")
 public class Lease {
 
     @Id
@@ -22,14 +22,13 @@ public class Lease {
     @NotNull(message = "O ID não deve ser nulo")
     private Long id;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, optional = false)
     @JoinColumn(name = "usuario_id", nullable = false, foreignKey = @ForeignKey(name = "fk_lease_user"))
     @NotNull(message = "O usuário não deve ser nulo")
     private User user;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, optional = false)
     @JoinColumn(name = "livro_id", nullable = false, foreignKey = @ForeignKey(name = "fk_lease_book"))
-    @NotNull(message = "O livro não deve ser nulo")
     private Book book;
 
     @Column(name = "data_emprestimo", nullable = false)
