@@ -53,11 +53,7 @@
 
    Substitua a `GOOGLE_BOOKS_API_KEY` pela chave da API do Google Books.
 
-2. **Executar Migrações**: Você pode rodar as migrações manualmente ou deixar que o projeto execute-as ao iniciar:
-
-    ```bash
-    ./mvnw flyway:migrate
-    ```
+2. **Executar Migrações**: A inicialização do projeto executa as migrações automaticamente e cria as tabelas no banco de dados.
 
 ### Executando o Backend
 
