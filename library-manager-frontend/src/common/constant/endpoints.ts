@@ -4,6 +4,7 @@ export const API_ENDPOINTS = {
     CREATE: "v1/books",
     UPDATE: (id: number) => `v1/books/${id}`,
     DELETE: (id: number) => `v1/books/${id}`,
+    SEARCH: (title: string) => `v1/books/search?title=${title}`,
   },
   USERS: {
     GET: "v1/users",

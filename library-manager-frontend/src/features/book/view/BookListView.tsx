@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { BookFormModal } from "../component/BookFormModal";
 import type { Book } from "../../../common/type";
 import {
@@ -11,22 +11,25 @@ import {
   Pagination,
   Stack,
   Text,
+  TextInput,
   Title,
   Tooltip,
 } from "@mantine/core";
 import usePaginatedFetch from "../../../common/hook/usePaginatedFetch";
 import { API_ENDPOINTS } from "../../../common/constant/endpoints";
 import { BookTable } from "../component/BookTable";
-import { IconPlus } from "@tabler/icons-react";
+import { IconBrandGoogle, IconPlus } from "@tabler/icons-react";
 import { HttpMethod } from "../../../common/service/axiosService";
 import useFetch from "../../../common/hook/useFetch";
 import { modals } from "@mantine/modals";
+import { notifications } from "@mantine/notifications";
 
 export function BookListView() {
   const books = usePaginatedFetch<Book>(API_ENDPOINTS.BOOKS.GET);
   const saveBook = useFetch<Book>(HttpMethod.Post, "", false);
   const updateBook = useFetch<Book>(HttpMethod.Put, "", false);
   const deleteBook = useFetch<boolean>(HttpMethod.Delete, "", false);
+  const searchBook = useFetch<Book[]>(HttpMethod.Get, "", false);
 
   const [modalOpened, setModalOpened] = useState(false);
   const [bookToEdit, setBookToEdit] = useState<Book | null>(null);
@@ -65,6 +68,65 @@ export function BookListView() {
     return fetchMethod.refetch(endpoint, book);
   };
 
+  // Integração com o Google Books API
+  const [searchTerm, setSearchTerm] = useState<string>("");
+
+  const handleSearchBooks = () => {
+    if (searchTerm.trim() === "") {
+      notifications.show({
+        title: "Erro",
+        message: "Digite o título do livro que deseja procurar",
+        color: "red",
+        position: "top-right",
+      });
+      return;
+    }
+    void searchBook.refetch(API_ENDPOINTS.BOOKS.SEARCH(searchTerm));
+  };
+
+  useEffect(() => {
+    if (searchBook.data)
+      modals.open({
+        title: "Procurar Livro",
+        size: "xl",
+        children: (
+          <BookTable
+            data={searchBook.data}
+            showIds={false}
+            onEditBookLoading={false}
+            onEditBook={() => {}}
+            onDeleteBookLoading={false}
+            onDeleteBook={() => {}}
+            actionRenderer={({ book }) => (
+              <Tooltip label="Adicionar" position="top">
+                <ActionIcon
+                  size="lg"
+                  color="green"
+                  loading={saveBook.loading}
+                  onClick={() => {
+                    saveBook
+                      .refetch(API_ENDPOINTS.BOOKS.CREATE, book)
+                      .then(() => {
+                        void books.refetch();
+                        modals.closeAll();
+                        notifications.show({
+                          title: "Sucesso",
+                          message: "Livro adicionado com sucesso",
+                          color: "green",
+                          position: "top-right",
+                        });
+                      });
+                  }}
+                >
+                  <IconPlus size={16} />
+                </ActionIcon>
+              </Tooltip>
+            )}
+          />
+        ),
+      });
+  }, [searchBook.data]);
+
   // Calcula a altura mínima do Card com base no número de livros
   const minHeight = useMemo(
     () =>
@@ -86,17 +148,43 @@ export function BookListView() {
               <Title order={3} ta="center">
                 Livros
               </Title>
-              <Tooltip label="Adicionar Livro" position="bottom">
-                <ActionIcon
-                  size="lg"
-                  bg="green"
-                  aria-label="Adicionar Livro"
-                  variant="success"
-                  onClick={handleAddBook}
-                >
-                  <IconPlus size={28} />
-                </ActionIcon>
-              </Tooltip>
+              <Group gap={8}>
+                <Group gap={2}>
+                  <TextInput
+                    placeholder="Pesquisar com Google Books"
+                    value={searchTerm}
+                    onChange={(event) =>
+                      setSearchTerm(event.currentTarget.value)
+                    }
+                  />
+                  <Tooltip label="Procurar" position="bottom">
+                    <ActionIcon
+                      w={36}
+                      h={36}
+                      size="lg"
+                      aria-label="Procurar Livro com Google Books"
+                      variant="default"
+                      loading={searchBook.loading}
+                      onClick={handleSearchBooks}
+                    >
+                      <IconBrandGoogle size={28} />
+                    </ActionIcon>
+                  </Tooltip>
+                </Group>
+                <Tooltip label="Adicionar Livro" position="bottom">
+                  <ActionIcon
+                    w={36}
+                    h={36}
+                    size="lg"
+                    bg="green"
+                    aria-label="Adicionar Livro"
+                    variant="success"
+                    onClick={handleAddBook}
+                  >
+                    <IconPlus size={28} />
+                  </ActionIcon>
+                </Tooltip>
+              </Group>
             </Group>
           </Card.Section>
           {books.error && (

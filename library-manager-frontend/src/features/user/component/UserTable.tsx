@@ -94,8 +94,11 @@ export function UserTable({
                     <Tooltip label="Editar" position="top">
                       <ActionIcon
                         size="lg"
-                        loading={onEditUserLoading}
-                        onClick={() => onEditUser(user)}
+                        loading={onEditUserLoading && loadingUser === user.id}
+                        onClick={() => {
+                          onEditUser(user);
+                          setLoadingUser(user.id);
+                        }}
                       >
                         <IconEdit size={16} />
                       </ActionIcon>
@@ -104,8 +107,11 @@ export function UserTable({
                       <ActionIcon
                         color="red"
                         size="lg"
-                        loading={onDeleteUserLoading}
-                        onClick={() => onDeleteUser(user)}
+                        loading={onDeleteUserLoading && loadingUser === user.id}
+                        onClick={() => {
+                          onDeleteUser(user);
+                          setLoadingUser(user.id);
+                        }}
                       >
                         <IconTrash size={16} />
                       </ActionIcon>

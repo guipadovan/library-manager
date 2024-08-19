@@ -82,7 +82,7 @@ export function UserListView() {
             children: (
               <BookTable
                 data={data}
-                actions={false}
+                showActions={false}
                 onEditBookLoading={false}
                 onEditBook={() => {}}
                 onDeleteBookLoading={false}

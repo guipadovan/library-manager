@@ -10,6 +10,11 @@ import {
 import { IconEdit, IconTrash } from "@tabler/icons-react";
 import type { Book } from "../../../common/type";
 import dayjs from "dayjs";
+import { ReactNode, useState } from "react";
+
+interface ActionRendererProps {
+  book: Book;
+}
 
 interface BookTableProps {
   data: Book[];
@@ -17,7 +22,9 @@ interface BookTableProps {
   onEditBook: (book: Book) => void;
   onDeleteBookLoading: boolean;
   onDeleteBook: (book: Book) => void;
-  actions?: boolean;
+  actionRenderer?: (props: ActionRendererProps) => ReactNode;
+  showIds?: boolean;
+  showActions?: boolean;
 }
 
 export function BookTable({
@@ -26,8 +33,12 @@ export function BookTable({
   onEditBook,
   onDeleteBookLoading,
   onDeleteBook,
-  actions = true,
+  actionRenderer,
+  showIds = true,
+  showActions = true,
 }: BookTableProps) {
+  const [loadingBook, setLoadingBook] = useState<number | undefined>();
+
   return data.length === 0 ? (
     <Center>
       <Stack align="center" gap="0" mt={16}>
@@ -48,47 +59,59 @@ export function BookTable({
       >
         <Table.Thead>
           <Table.Tr>
-            <Table.Th>ID</Table.Th>
+            {showIds && <Table.Th>ID</Table.Th>}
             <Table.Th>Título</Table.Th>
             <Table.Th>Autor</Table.Th>
             <Table.Th>Data de Publicação</Table.Th>
             <Table.Th>Categoria</Table.Th>
-            {actions && <Table.Th ta="end">Ações</Table.Th>}
+            {showActions && <Table.Th ta="end">Ações</Table.Th>}
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
           {data.map((book) => (
             <Table.Tr key={book.id}>
-              <Table.Td>{book.id}</Table.Td>
+              {showIds && <Table.Td>{book.id}</Table.Td>}
               <Table.Td>{book.title}</Table.Td>
               <Table.Td>{book.author}</Table.Td>
               <Table.Td>
                 {dayjs(book.publicationDate).format("DD/MM/YYYY")}
               </Table.Td>
               <Table.Td>{book.category}</Table.Td>
-              {actions && (
+              {showActions && (
                 <Table.Td>
-                  <ActionIcon.Group style={{ justifyContent: "flex-end" }}>
-                    <Tooltip label="Editar" position="top">
-                      <ActionIcon
-                        size="lg"
-                        loading={onEditBookLoading}
-                        onClick={() => onEditBook(book)}
-                      >
-                        <IconEdit size={16} />
-                      </ActionIcon>
-                    </Tooltip>
-                    <Tooltip label="Excluir" position="top">
-                      <ActionIcon
-                        color="red"
-                        size="lg"
-                        loading={onDeleteBookLoading}
-                        onClick={() => onDeleteBook(book)}
-                      >
-                        <IconTrash size={16} />
-                      </ActionIcon>
-                    </Tooltip>
-                  </ActionIcon.Group>
+                  {actionRenderer ? (
+                    actionRenderer({ book })
+                  ) : (
+                    <ActionIcon.Group style={{ justifyContent: "flex-end" }}>
+                      <Tooltip label="Editar" position="top">
+                        <ActionIcon
+                          size="lg"
+                          loading={onEditBookLoading && loadingBook === book.id}
+                          onClick={() => {
+                            onEditBook(book);
+                            setLoadingBook(book.id);
+                          }}
+                        >
+                          <IconEdit size={16} />
+                        </ActionIcon>
+                      </Tooltip>
+                      <Tooltip label="Excluir" position="top">
+                        <ActionIcon
+                          color="red"
+                          size="lg"
+                          loading={
+                            onDeleteBookLoading && loadingBook === book.id
+                          }
+                          onClick={() => {
+                            onDeleteBook(book);
+                            setLoadingBook(book.id);
+                          }}
+                        >
+                          <IconTrash size={16} />
+                        </ActionIcon>
+                      </Tooltip>
+                    </ActionIcon.Group>
+                  )}
                 </Table.Td>
               )}
             </Table.Tr>
