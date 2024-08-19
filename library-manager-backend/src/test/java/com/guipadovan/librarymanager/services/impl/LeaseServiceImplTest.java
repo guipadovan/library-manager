@@ -101,7 +101,7 @@ public class LeaseServiceImplTest {
 
         when(bookService.getBook(any(Long.class))).thenReturn(Optional.of(book));
         when(leaseRepository.existsByBook_IdAndStatusActive(any(Long.class))).thenReturn(true);
-        when(leaseRepository.findByBook_Id(any(Long.class))).thenReturn(lease);
+        when(leaseRepository.findByBook_IdAndStatusActive(any(Long.class))).thenReturn(lease);
         when(leaseRepository.save(any(Lease.class))).thenReturn(lease);
 
         Lease updatedLease = leaseService.returnBook(1L);
