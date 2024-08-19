@@ -1,4 +1,14 @@
-import { ActionIcon, Button, Group, Table, Tooltip } from "@mantine/core";
+import {
+  ActionIcon,
+  Button,
+  Center,
+  Group,
+  Stack,
+  Table,
+  Text,
+  Title,
+  Tooltip,
+} from "@mantine/core";
 import { IconEdit, IconTrash } from "@tabler/icons-react";
 import type { User } from "../../../common/type";
 import dayjs from "dayjs";
@@ -25,7 +35,16 @@ export function UserTable({
 }: UserTableProps) {
   const [loadingUser, setLoadingUser] = useState<number | undefined>();
 
-  return (
+  return data.length === 0 ? (
+    <Center>
+      <Stack align="center" gap="0" mt={16}>
+        <Title order={2}>Nenhum usuário encontrado</Title>
+        <Text fz={18} c="gray.8">
+          Clique no botão + para adicionar um novo usuário
+        </Text>
+      </Stack>
+    </Center>
+  ) : (
     <Table.ScrollContainer minWidth={800}>
       <Table
         striped

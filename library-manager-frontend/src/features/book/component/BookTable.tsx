@@ -1,4 +1,12 @@
-import { ActionIcon, Table, Tooltip } from "@mantine/core";
+import {
+  ActionIcon,
+  Center,
+  Stack,
+  Table,
+  Text,
+  Title,
+  Tooltip,
+} from "@mantine/core";
 import { IconEdit, IconTrash } from "@tabler/icons-react";
 import type { Book } from "../../../common/type";
 import dayjs from "dayjs";
@@ -20,7 +28,16 @@ export function BookTable({
   onDeleteBook,
   actions = true,
 }: BookTableProps) {
-  return (
+  return data.length === 0 ? (
+    <Center>
+      <Stack align="center" gap="0" mt={16}>
+        <Title order={2}>Nenhum livro encontrado</Title>
+        <Text fz={18} c="gray.8">
+          Clique no botão + para adicionar um novo livro
+        </Text>
+      </Stack>
+    </Center>
+  ) : (
     <Table.ScrollContainer minWidth={600}>
       <Table
         striped
