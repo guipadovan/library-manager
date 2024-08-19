@@ -36,14 +36,14 @@ export function BookListView() {
       title: "Confirmar exclusão",
       children: "Tem certeza de que deseja excluir este livro?",
       labels: { confirm: "Excluir", cancel: "Cancelar" },
-      onConfirm: () => handleDelete(bookId),
+      onConfirm: () => {
+        deleteBook
+          .refetch(API_ENDPOINTS.BOOKS.DELETE(bookId), null)
+          .then(() => {
+            void books.refetch();
+          });
+      },
     });
-
-  const handleDelete = (bookId: number) => {
-    deleteBook.refetch(API_ENDPOINTS.BOOKS.DELETE(bookId), null).then(() => {
-      void books.refetch();
-    });
-  };
 
   const handleAddBook = () => {
     setBookToEdit(null);
