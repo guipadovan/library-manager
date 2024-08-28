@@ -6,10 +6,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.lang.NonNull;
-import org.springframework.transaction.annotation.Transactional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
-    @Transactional
     @Modifying
     @Query("delete from User u where u.id = :id")
     int deleteByIdInt(@Param("id") @NonNull Long id);

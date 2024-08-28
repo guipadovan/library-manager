@@ -7,12 +7,10 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.lang.NonNull;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 public interface BookRepository extends JpaRepository<Book, Long> {
-    @Transactional
     @Modifying
     @Query("delete from Book b where b.id = :id")
     int deleteByIdInt(@NonNull Long id);

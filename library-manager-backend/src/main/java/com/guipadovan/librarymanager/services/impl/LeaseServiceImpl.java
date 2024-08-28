@@ -11,6 +11,7 @@ import com.guipadovan.librarymanager.services.LeaseService;
 import com.guipadovan.librarymanager.services.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -21,6 +22,7 @@ import java.util.Optional;
  * Implementation of {@link LeaseService} interface.
  */
 @Service
+@Transactional
 @Slf4j
 public class LeaseServiceImpl implements LeaseService {
 
